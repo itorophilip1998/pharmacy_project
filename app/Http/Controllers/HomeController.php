@@ -29,8 +29,8 @@ class HomeController extends Controller
     {
         $isUser=User::where('id',Auth::user()->id)->where('role',"user")->first();
         $isAdmin=User::where('id',Auth::user()->id)->where('role',"admin")->first();
-        $orders=Orders::where('user_id',Auth::user()->id)->with('drugs')->get();
-        $events=Logs::where('user_id',Auth::user()->id)->with('user')->paginate(10);
+        $orders=Orders::where('user_id',Auth::user()->id)->where("status","Paid")->with('drugs')->get();
+        $events=Logs::where('user_id',Auth::user()->id)->with('user')->latest()->paginate(10);
         if ((Auth::check()) && ($isUser)) {
             $data=[
                 "user"=>Auth::user(),

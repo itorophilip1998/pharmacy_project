@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header">{{ __('Dashboard') }} <a href="/" class="text-white float-right"> <i class="fa fa-arrow-left" aria-hidden="true"></i> </a> </div>
 
                 <div class="card-body">
                   <div class="row">

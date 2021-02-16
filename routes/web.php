@@ -8,6 +8,7 @@ use App\Contact;
 use App\Drugs;
 use App\Notifications;
 use App\Orders;
+use App\Logs;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,8 @@ Route::get('/loads', function () {
     'notifications'=>Notifications::all()->count(),
     'Orders'=>Orders::all()->count(),
     'user'=>User::all()->count(),
+    "events"=>Logs::where('user_id',Auth::user()->id)->with('user')->latest()->paginate(10)
+
  ];
 return response()->json(['dashboard'=>$data], 200); 
      
@@ -64,6 +67,11 @@ Route::get('/book-drugs', function () {
     }
 });
 
+Route::get('/paid', function () {
+    Orders::where("user_id",Auth::user()->id)->update(["status"=>"Paid"]);
+    return redirect('/home');
+});
+ 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -73,3 +81,4 @@ Route::resource('/notify', 'NotificationsController');
 Route::resource('/user', 'UsersController');
 Route::resource('/events', 'AppointmentController');
 Route::resource('/contact', 'ContactController');  
+Route::resource('/order', 'OrdersController');  

@@ -32,12 +32,12 @@
                                          </button>
                                  </div>
                                  <div class="modal-body ">
-                                     <input id="my-input" class="form-control text-dark mb-2" v-model="quantity" placeholder="Quantity" type="number" name=""> 
-                                     <h3 class="text-grey m-0">Total: <strike>N</strike>{{quantity * item.price}}</h3>
-                                 </div>
+                                     <input id="my-input" class="form-control text-dark mb-2" v-model="order.qantity"  @input="order.price = order.qantity * item.price"  placeholder="Quantity" type="number" name=""> 
+                                     <h3 class="text-grey m-0">Total: <strike>N</strike>{{order.qantity * item.price}}</h3> 
+                                 </div> 
                                  <div class="modal-footer">
                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                     <button type="button" class="btn btn-info">Buy</button>
+                                     <button type="button" class="btn btn-info" @click="buy(item.id,item.price)">Buy</button>
                                  </div>
                              </div>
                          </div>
@@ -49,15 +49,20 @@
 </template>
  <script>
  export default {
+     props:['user'],
      data() {
          return {
              items:[],
-             search:'',
-             quantity:'', 
+             search:'', 
+             order: {
+                 qantity:"", 
+                 status:"Not-paid", 
+                 price:"",
+             }
          }
      },
      mounted() {
-        this.loadItem()
+        this.loadItem(); 
     },
    computed: {
     loadData()
@@ -81,8 +86,23 @@
                 this.items = response.data.drugs
             })
         },
-      
-   
+      buy(drugs_id,price)
+        {
+         console.log(this.user.id);
+
+           axios.post('/order',
+              {
+                  "user_id":this.user.id,
+                  "drugs_id":drugs_id,
+                  "qantity":this.order.qantity,
+                  "status":this.order.status,
+                  "price":this.order.qantity * price,
+              }
+           )
+            .then((response)=>{ 
+               location.href="https://paystack.com/pay/jesusdekeyoffline" 
+            })
+        }   
     }
 }
  

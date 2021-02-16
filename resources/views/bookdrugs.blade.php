@@ -23,7 +23,7 @@
 
 <body>
     <div id="app">
-        <order-template></order-template>
+        <order-template :user="{{ json_encode(Auth::user()) }}"></order-template>
 
     </div>
 

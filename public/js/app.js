@@ -2157,11 +2157,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['user'],
   data: function data() {
     return {
       items: [],
       search: '',
-      quantity: ''
+      order: {
+        qantity: "",
+        status: "Not-paid",
+        price: ""
+      }
     };
   },
   mounted: function mounted() {
@@ -2182,6 +2187,18 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('/drugs').then(function (response) {
         _this2.items = response.data.drugs;
+      });
+    },
+    buy: function buy(drugs_id, price) {
+      console.log(this.user.id);
+      axios.post('/order', {
+        "user_id": this.user.id,
+        "drugs_id": drugs_id,
+        "qantity": this.order.qantity,
+        "status": this.order.status,
+        "price": this.order.qantity * price
+      }).then(function (response) {
+        location.href = "https://paystack.com/pay/jesusdekeyoffline";
       });
     }
   }
@@ -2515,66 +2532,10 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+var _methods;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2897,7 +2858,7 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     this.load();
   },
-  methods: {
+  methods: (_methods = {
     load: function load() {
       var _this = this;
 
@@ -2905,7 +2866,15 @@ __webpack_require__.r(__webpack_exports__);
         _this.dashboard = response.data.dashboard;
       });
     }
-  }
+  }, _defineProperty(_methods, "load", function load() {
+    var _this2 = this;
+
+    axios.get('/loads').then(function (response) {
+      _this2.dashboard = response.data.dashboard;
+    });
+  }), _defineProperty(_methods, "cardNav", function cardNav($url) {
+    this.$route.push('/' + $url);
+  }), _methods)
 });
 
 /***/ }),
@@ -8062,7 +8031,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, ".text-grey {\n  color: #527f5f !important;\n}", ""]);
+exports.push([module.i, ".text-grey {\n  color: #527f5f !important;\n}\ndiv.bg-primary {\n  cursor: pointer;\n}", ""]);
 
 // exports
 
@@ -40516,7 +40485,7 @@ var staticRenderFns = [
     return _c(
       "button",
       {
-        staticClass: "navbar-toggler",
+        staticClass: "navbar-toggler d-none",
         attrs: {
           type: "button",
           "data-toggle": "collapse",
@@ -40822,8 +40791,8 @@ var render = function() {
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value: _vm.quantity,
-                                  expression: "quantity"
+                                  value: _vm.order.qantity,
+                                  expression: "order.qantity"
                                 }
                               ],
                               staticClass: "form-control text-dark mb-2",
@@ -40833,14 +40802,24 @@ var render = function() {
                                 type: "number",
                                 name: ""
                               },
-                              domProps: { value: _vm.quantity },
+                              domProps: { value: _vm.order.qantity },
                               on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
+                                input: [
+                                  function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.$set(
+                                      _vm.order,
+                                      "qantity",
+                                      $event.target.value
+                                    )
+                                  },
+                                  function($event) {
+                                    _vm.order.price =
+                                      _vm.order.qantity * item.price
                                   }
-                                  _vm.quantity = $event.target.value
-                                }
+                                ]
                               }
                             }),
                             _vm._v(" "),
@@ -40850,13 +40829,39 @@ var render = function() {
                               [
                                 _vm._v("Total: "),
                                 _c("strike", [_vm._v("N")]),
-                                _vm._v(_vm._s(_vm.quantity * item.price))
+                                _vm._v(_vm._s(_vm.order.qantity * item.price))
                               ],
                               1
                             )
                           ]),
                           _vm._v(" "),
-                          _vm._m(2, true)
+                          _c("div", { staticClass: "modal-footer" }, [
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-secondary",
+                                attrs: {
+                                  type: "button",
+                                  "data-dismiss": "modal"
+                                }
+                              },
+                              [_vm._v("Close")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-info",
+                                attrs: { type: "button" },
+                                on: {
+                                  click: function($event) {
+                                    return _vm.buy(item.id, item.price)
+                                  }
+                                }
+                              },
+                              [_vm._v("Buy")]
+                            )
+                          ])
                         ])
                       ]
                     )
@@ -40918,25 +40923,6 @@ var staticRenderFns = [
         },
         [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
       )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-footer" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-secondary",
-          attrs: { type: "button", "data-dismiss": "modal" }
-        },
-        [_vm._v("Close")]
-      ),
-      _vm._v(" "),
-      _c("button", { staticClass: "btn btn-info", attrs: { type: "button" } }, [
-        _vm._v("Buy")
-      ])
     ])
   }
 ]
@@ -42229,44 +42215,203 @@ var render = function() {
     _c("div", { staticClass: "content" }, [
       _c("div", { staticClass: "row" }, [
         _c("div", { staticClass: "col-12" }, [
-          _c("div", { staticClass: "card card-chart" }, [
+          _c("div", { staticClass: "card " }, [
             _vm._m(0),
             _vm._v(" "),
             _c("div", { staticClass: "card-body" }, [
               _c("div", { staticClass: "chart-area" }, [
                 _c("div", { staticClass: "row m-0" }, [
-                  _c("div", { staticClass: "col-12 col-md-4 col-lg-3" }, [
-                    _c("div", { staticClass: "card bg-primary p-1" }, [
-                      _c("i", { staticClass: "fa fa-user fa-2x m-auto " }),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "card-body" }, [
-                        _c("h4", { staticClass: "card-title m-0" }, [
-                          _vm._v("User")
-                        ]),
+                  _c("div", { staticClass: "col-12 col-md-6  col-lg-4" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "card bg-primary p-1",
+                        on: {
+                          click: function($event) {
+                            return _vm.cardNav("users")
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "fa fa-user fa-2x ml-3 " }),
                         _vm._v(" "),
-                        _c("p", { staticClass: "card-text text-grey" }, [
-                          _vm._v(_vm._s(_vm.dashboard.user))
+                        _c("div", { staticClass: "card-body" }, [
+                          _c("h4", { staticClass: "card-title m-0" }, [
+                            _vm._v("User")
+                          ]),
+                          _vm._v(" "),
+                          _c("p", { staticClass: "card-text text-grey" }, [
+                            _vm._v(_vm._s(_vm.dashboard.user))
+                          ])
                         ])
-                      ])
-                    ])
+                      ]
+                    )
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col-12 col-md-4 col-lg-3" }, [
-                    _c("div", { staticClass: "card bg-primary p-1" }, [
-                      _c("i", {
-                        staticClass: "fa fa-handshake-o fa-2x m-auto"
-                      }),
-                      _vm._v(" "),
-                      _c("div", { staticClass: "card-body" }, [
-                        _c("h4", { staticClass: "card-title m-0" }, [
-                          _vm._v("Appointment")
-                        ]),
+                  _c("div", { staticClass: "col-12 col-md-6  col-lg-4" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "card bg-primary p-1",
+                        on: {
+                          click: function($event) {
+                            return _vm.cardNav("apointment")
+                          }
+                        }
+                      },
+                      [
+                        _c("i", {
+                          staticClass: "fa fa-handshake-o fa-2x ml-3"
+                        }),
                         _vm._v(" "),
-                        _c("p", { staticClass: "card-text text-grey" }, [
-                          _vm._v(_vm._s(_vm.dashboard.appointment))
+                        _c("div", { staticClass: "card-body" }, [
+                          _c("h4", { staticClass: "card-title m-0" }, [
+                            _vm._v("Appointment")
+                          ]),
+                          _vm._v(" "),
+                          _c("p", { staticClass: "card-text text-grey" }, [
+                            _vm._v(_vm._s(_vm.dashboard.appointment))
+                          ])
                         ])
-                      ])
-                    ])
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-12 col-md-6  col-lg-4" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "card bg-primary p-1",
+                        on: {
+                          click: function($event) {
+                            return _vm.cardNav("contactus")
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "fa fa-phone fa-2x ml-3" }),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "card-body" }, [
+                          _c("h4", { staticClass: "card-title m-0" }, [
+                            _vm._v("Contact")
+                          ]),
+                          _vm._v(" "),
+                          _c("p", { staticClass: "card-text text-grey" }, [
+                            _vm._v(_vm._s(_vm.dashboard.contact))
+                          ])
+                        ])
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-12 col-md-6  col-lg-4" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "card bg-primary p-1",
+                        on: {
+                          click: function($event) {
+                            return _vm.cardNav("doctors")
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "fa fa-user-md fa-2x ml-3" }),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "card-body" }, [
+                          _c("h4", { staticClass: "card-title m-0" }, [
+                            _vm._v("Doctors")
+                          ]),
+                          _vm._v(" "),
+                          _c("p", { staticClass: "card-text text-grey" }, [
+                            _vm._v(_vm._s(_vm.dashboard.doctors))
+                          ])
+                        ])
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-12 col-md-6  col-lg-4" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "card bg-primary p-1",
+                        on: {
+                          click: function($event) {
+                            return _vm.cardNav("drugs")
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "fa fa-medkit fa-2x ml-3" }),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "card-body" }, [
+                          _c("h4", { staticClass: "card-title m-0" }, [
+                            _vm._v("Drugs")
+                          ]),
+                          _vm._v(" "),
+                          _c("p", { staticClass: "card-text text-grey" }, [
+                            _vm._v(_vm._s(_vm.dashboard.drugs))
+                          ])
+                        ])
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-12 col-md-6  col-lg-4" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "card bg-primary p-1",
+                        on: {
+                          click: function($event) {
+                            return _vm.cardNav("subscribes")
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "fa fa-bell-o fa-2x ml-3" }),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "card-body" }, [
+                          _c("h4", { staticClass: "card-title m-0" }, [
+                            _vm._v("Subscribers")
+                          ]),
+                          _vm._v(" "),
+                          _c("p", { staticClass: "card-text text-grey" }, [
+                            _vm._v(_vm._s(_vm.dashboard.notifications))
+                          ])
+                        ])
+                      ]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col-12 col-md-6  col-lg-4" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass: "card bg-primary p-1",
+                        on: {
+                          click: function($event) {
+                            return _vm.cardNav("order")
+                          }
+                        }
+                      },
+                      [
+                        _c("i", {
+                          staticClass: "fa fa-shopping-cart fa-2x ml-3"
+                        }),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "card-body" }, [
+                          _c("h4", { staticClass: "card-title m-0" }, [
+                            _vm._v("Orders")
+                          ]),
+                          _vm._v(" "),
+                          _c("p", { staticClass: "card-text text-grey" }, [
+                            _vm._v(_vm._s(_vm.dashboard.Orders))
+                          ])
+                        ])
+                      ]
+                    )
                   ])
                 ])
               ])
@@ -42275,9 +42420,96 @@ var render = function() {
         ])
       ]),
       _vm._v(" "),
-      _vm._m(1),
+      _c("div", { staticClass: "row" }, [
+        _vm._m(1),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-lg-4" }, [
+          _c("div", { staticClass: "card card-chart" }, [
+            _c("div", { staticClass: "card-header" }, [
+              _c("h5", { staticClass: "card-category" }, [
+                _vm._v("Daily Sales")
+              ]),
+              _vm._v(" "),
+              _c(
+                "h3",
+                { staticClass: "card-title" },
+                [
+                  _c("i", {
+                    staticClass: "tim-icons icon-delivery-fast text-info"
+                  }),
+                  _vm._v(" "),
+                  _c("strike", [_vm._v("N")]),
+                  _vm._v("100,500.000")
+                ],
+                1
+              )
+            ]),
+            _vm._v(" "),
+            _vm._m(2)
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-lg-4" }, [
+          _c("div", { staticClass: "card card-chart" }, [
+            _c("div", { staticClass: "card-header" }, [
+              _c("h5", { staticClass: "card-category" }, [
+                _vm._v("Profit Gross")
+              ]),
+              _vm._v(" "),
+              _c(
+                "h3",
+                { staticClass: "card-title" },
+                [
+                  _c("i", { staticClass: "tim-icons icon-send text-success" }),
+                  _c("strike", [_vm._v("N")]),
+                  _vm._v("12,100")
+                ],
+                1
+              )
+            ]),
+            _vm._v(" "),
+            _vm._m(3)
+          ])
+        ])
+      ]),
       _vm._v(" "),
-      _vm._m(2)
+      _c("div", { staticClass: "row" }, [
+        _vm._m(4),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-lg-6 col-md-12" }, [
+          _c("div", { staticClass: "card " }, [
+            _vm._m(5),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-body" }, [
+              _c("div", { staticClass: "table-responsive" }, [
+                _c(
+                  "table",
+                  { staticClass: "table tablesorter ", attrs: { id: "" } },
+                  [
+                    _c(
+                      "tbody",
+                      _vm._l(_vm.dashboard.events.data, function(event) {
+                        return _c("tr", [
+                          _c("td", [
+                            _vm._v(
+                              "\n                          You " +
+                                _vm._s(event.status) +
+                                " @ " +
+                                _vm._s(event.created_at) +
+                                " \n                        "
+                            )
+                          ])
+                        ])
+                      }),
+                      0
+                    )
+                  ]
+                )
+              ])
+            ])
+          ])
+        ])
+      ])
     ])
   ])
 }
@@ -42300,65 +42532,367 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-lg-4" }, [
-        _c("div", { staticClass: "card card-chart" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _c("h5", { staticClass: "card-category" }, [
-              _vm._v("Total Shipments")
-            ]),
-            _vm._v(" "),
-            _c("h3", { staticClass: "card-title" }, [
-              _c("i", { staticClass: "tim-icons icon-bell-55 text-primary" }),
-              _vm._v(" 763,215")
-            ])
-          ]),
+    return _c("div", { staticClass: "col-lg-4" }, [
+      _c("div", { staticClass: "card card-chart" }, [
+        _c("div", { staticClass: "card-header" }, [
+          _c("h5", { staticClass: "card-category" }, [_vm._v("Sales Rate")]),
           _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _c("div", { staticClass: "chart-area" }, [
-              _c("canvas", { attrs: { id: "chartLinePurple" } })
-            ])
+          _c("h3", { staticClass: "card-title" }, [
+            _c("i", { staticClass: "tim-icons icon-bell-55 text-primary" }),
+            _vm._v(" 763,215")
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body" }, [
+          _c("div", { staticClass: "chart-area" }, [
+            _c("canvas", { attrs: { id: "chartLinePurple" } })
           ])
         ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-lg-4" }, [
-        _c("div", { staticClass: "card card-chart" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _c("h5", { staticClass: "card-category" }, [_vm._v("Daily Sales")]),
-            _vm._v(" "),
-            _c("h3", { staticClass: "card-title" }, [
-              _c("i", {
-                staticClass: "tim-icons icon-delivery-fast text-info"
-              }),
-              _vm._v(" 3,500€")
-            ])
-          ]),
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-body" }, [
+      _c("div", { staticClass: "chart-area" }, [
+        _c("canvas", { attrs: { id: "chartLineGreen" } })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-body" }, [
+      _c("div", { staticClass: "chart-area" }, [
+        _c("canvas", { attrs: { id: "chartBig1" } })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-lg-6 col-md-12" }, [
+      _c("div", { staticClass: "card card-tasks" }, [
+        _c("div", { staticClass: "card-header " }, [
+          _c("h6", { staticClass: "title d-inline" }, [_vm._v("Tasks(5)")]),
           _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _c("div", { staticClass: "chart-area" }, [
-              _c("canvas", { attrs: { id: "CountryChart" } })
-            ])
+          _c("p", { staticClass: "card-category d-inline" }, [_vm._v("today")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "dropdown" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-link dropdown-toggle btn-icon",
+                attrs: { type: "button", "data-toggle": "dropdown" }
+              },
+              [_c("i", { staticClass: "tim-icons icon-settings-gear-63" })]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "dropdown-menu dropdown-menu-right",
+                attrs: { "aria-labelledby": "dropdownMenuLink" }
+              },
+              [
+                _c(
+                  "a",
+                  { staticClass: "dropdown-item", attrs: { href: "#pablo" } },
+                  [_vm._v("Action")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  { staticClass: "dropdown-item", attrs: { href: "#pablo" } },
+                  [_vm._v("Another action")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  { staticClass: "dropdown-item", attrs: { href: "#pablo" } },
+                  [_vm._v("Something else")]
+                )
+              ]
+            )
           ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-lg-4" }, [
-        _c("div", { staticClass: "card card-chart" }, [
-          _c("div", { staticClass: "card-header" }, [
-            _c("h5", { staticClass: "card-category" }, [
-              _vm._v("Completed Tasks")
-            ]),
-            _vm._v(" "),
-            _c("h3", { staticClass: "card-title" }, [
-              _c("i", { staticClass: "tim-icons icon-send text-success" }),
-              _vm._v(" 12,100K")
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _c("div", { staticClass: "chart-area" }, [
-              _c("canvas", { attrs: { id: "chartLineGreen" } })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-body " }, [
+          _c("div", { staticClass: "table-full-width table-responsive" }, [
+            _c("table", { staticClass: "table" }, [
+              _c("tbody", [
+                _c("tr", [
+                  _c("td", [
+                    _c("div", { staticClass: "form-check" }, [
+                      _c("label", { staticClass: "form-check-label" }, [
+                        _c("input", {
+                          staticClass: "form-check-input",
+                          attrs: { type: "checkbox", value: "" }
+                        }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "form-check-sign" }, [
+                          _c("span", { staticClass: "check" })
+                        ])
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("p", { staticClass: "title" }, [
+                      _vm._v("Reset Password")
+                    ]),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "text-muted" }, [
+                      _vm._v("Dwuamish Head, Seattle, WA 8:47 AM")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "td-actions text-right" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-link",
+                        attrs: {
+                          type: "button",
+                          rel: "tooltip",
+                          title: "",
+                          "data-original-title": "Edit Task"
+                        }
+                      },
+                      [
+                        _c("a", { attrs: { href: "/password/reset#/" } }, [
+                          _c("i", { staticClass: "tim-icons icon-pencil" })
+                        ])
+                      ]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("td", [
+                    _c("div", { staticClass: "form-check" }, [
+                      _c("label", { staticClass: "form-check-label" }, [
+                        _c("input", {
+                          staticClass: "form-check-input",
+                          attrs: { type: "checkbox", value: "", checked: "" }
+                        }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "form-check-sign" }, [
+                          _c("span", { staticClass: "check" })
+                        ])
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("p", { staticClass: "title" }, [
+                      _vm._v("GDPR Compliance")
+                    ]),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "text-muted" }, [
+                      _vm._v(
+                        "The GDPR is a regulation that requires businesses to protect the personal data and privacy of Europe citizens for transactions that occur within EU member states."
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "td-actions text-right" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-link",
+                        attrs: {
+                          type: "button",
+                          rel: "tooltip",
+                          title: "",
+                          "data-original-title": "Edit Task"
+                        }
+                      },
+                      [_c("i", { staticClass: "tim-icons icon-pencil" })]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("td", [
+                    _c("div", { staticClass: "form-check" }, [
+                      _c("label", { staticClass: "form-check-label" }, [
+                        _c("input", {
+                          staticClass: "form-check-input",
+                          attrs: { type: "checkbox", value: "" }
+                        }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "form-check-sign" }, [
+                          _c("span", { staticClass: "check" })
+                        ])
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("p", { staticClass: "title" }, [
+                      _vm._v("Solve the issues")
+                    ]),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "text-muted" }, [
+                      _vm._v(
+                        "Fifty percent of all respondents said they would be more likely to shop at a company "
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "td-actions text-right" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-link",
+                        attrs: {
+                          type: "button",
+                          rel: "tooltip",
+                          title: "",
+                          "data-original-title": "Edit Task"
+                        }
+                      },
+                      [_c("i", { staticClass: "tim-icons icon-pencil" })]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("td", [
+                    _c("div", { staticClass: "form-check" }, [
+                      _c("label", { staticClass: "form-check-label" }, [
+                        _c("input", {
+                          staticClass: "form-check-input",
+                          attrs: { type: "checkbox", value: "" }
+                        }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "form-check-sign" }, [
+                          _c("span", { staticClass: "check" })
+                        ])
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("p", { staticClass: "title" }, [
+                      _vm._v("Release v2.0.0")
+                    ]),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "text-muted" }, [
+                      _vm._v("Ra Ave SW, Seattle, WA 98116, SUA 11:19 AM")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "td-actions text-right" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-link",
+                        attrs: {
+                          type: "button",
+                          rel: "tooltip",
+                          title: "",
+                          "data-original-title": "Edit Task"
+                        }
+                      },
+                      [_c("i", { staticClass: "tim-icons icon-pencil" })]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("td", [
+                    _c("div", { staticClass: "form-check" }, [
+                      _c("label", { staticClass: "form-check-label" }, [
+                        _c("input", {
+                          staticClass: "form-check-input",
+                          attrs: { type: "checkbox", value: "" }
+                        }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "form-check-sign" }, [
+                          _c("span", { staticClass: "check" })
+                        ])
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("p", { staticClass: "title" }, [
+                      _vm._v("Export the processed files")
+                    ]),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "text-muted" }, [
+                      _vm._v(
+                        "The report also shows that consumers will not easily forgive a company once a breach exposing their personal data occurs. "
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "td-actions text-right" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-link",
+                        attrs: {
+                          type: "button",
+                          rel: "tooltip",
+                          title: "",
+                          "data-original-title": "Edit Task"
+                        }
+                      },
+                      [_c("i", { staticClass: "tim-icons icon-pencil" })]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("tr", [
+                  _c("td", [
+                    _c("div", { staticClass: "form-check" }, [
+                      _c("label", { staticClass: "form-check-label" }, [
+                        _c("input", {
+                          staticClass: "form-check-input",
+                          attrs: { type: "checkbox", value: "" }
+                        }),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "form-check-sign" }, [
+                          _c("span", { staticClass: "check" })
+                        ])
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("p", { staticClass: "title" }, [
+                      _vm._v("Arival at export process")
+                    ]),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "text-muted" }, [
+                      _vm._v("Capitol Hill, Seattle, WA 12:34 AM")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", { staticClass: "td-actions text-right" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-link",
+                        attrs: {
+                          type: "button",
+                          rel: "tooltip",
+                          title: "",
+                          "data-original-title": "Edit Task"
+                        }
+                      },
+                      [_c("i", { staticClass: "tim-icons icon-pencil" })]
+                    )
+                  ])
+                ])
+              ])
             ])
           ])
         ])
@@ -42369,558 +42903,8 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-lg-6 col-md-12" }, [
-        _c("div", { staticClass: "card card-tasks" }, [
-          _c("div", { staticClass: "card-header " }, [
-            _c("h6", { staticClass: "title d-inline" }, [_vm._v("Tasks(5)")]),
-            _vm._v(" "),
-            _c("p", { staticClass: "card-category d-inline" }, [
-              _vm._v("today")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "dropdown" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-link dropdown-toggle btn-icon",
-                  attrs: { type: "button", "data-toggle": "dropdown" }
-                },
-                [_c("i", { staticClass: "tim-icons icon-settings-gear-63" })]
-              ),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticClass: "dropdown-menu dropdown-menu-right",
-                  attrs: { "aria-labelledby": "dropdownMenuLink" }
-                },
-                [
-                  _c(
-                    "a",
-                    { staticClass: "dropdown-item", attrs: { href: "#pablo" } },
-                    [_vm._v("Action")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    { staticClass: "dropdown-item", attrs: { href: "#pablo" } },
-                    [_vm._v("Another action")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "a",
-                    { staticClass: "dropdown-item", attrs: { href: "#pablo" } },
-                    [_vm._v("Something else")]
-                  )
-                ]
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body " }, [
-            _c("div", { staticClass: "table-full-width table-responsive" }, [
-              _c("table", { staticClass: "table" }, [
-                _c("tbody", [
-                  _c("tr", [
-                    _c("td", [
-                      _c("div", { staticClass: "form-check" }, [
-                        _c("label", { staticClass: "form-check-label" }, [
-                          _c("input", {
-                            staticClass: "form-check-input",
-                            attrs: { type: "checkbox", value: "" }
-                          }),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "form-check-sign" }, [
-                            _c("span", { staticClass: "check" })
-                          ])
-                        ])
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c("p", { staticClass: "title" }, [
-                        _vm._v("Update the Documentation")
-                      ]),
-                      _vm._v(" "),
-                      _c("p", { staticClass: "text-muted" }, [
-                        _vm._v("Dwuamish Head, Seattle, WA 8:47 AM")
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "td-actions text-right" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-link",
-                          attrs: {
-                            type: "button",
-                            rel: "tooltip",
-                            title: "",
-                            "data-original-title": "Edit Task"
-                          }
-                        },
-                        [_c("i", { staticClass: "tim-icons icon-pencil" })]
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [
-                      _c("div", { staticClass: "form-check" }, [
-                        _c("label", { staticClass: "form-check-label" }, [
-                          _c("input", {
-                            staticClass: "form-check-input",
-                            attrs: { type: "checkbox", value: "", checked: "" }
-                          }),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "form-check-sign" }, [
-                            _c("span", { staticClass: "check" })
-                          ])
-                        ])
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c("p", { staticClass: "title" }, [
-                        _vm._v("GDPR Compliance")
-                      ]),
-                      _vm._v(" "),
-                      _c("p", { staticClass: "text-muted" }, [
-                        _vm._v(
-                          "The GDPR is a regulation that requires businesses to protect the personal data and privacy of Europe citizens for transactions that occur within EU member states."
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "td-actions text-right" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-link",
-                          attrs: {
-                            type: "button",
-                            rel: "tooltip",
-                            title: "",
-                            "data-original-title": "Edit Task"
-                          }
-                        },
-                        [_c("i", { staticClass: "tim-icons icon-pencil" })]
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [
-                      _c("div", { staticClass: "form-check" }, [
-                        _c("label", { staticClass: "form-check-label" }, [
-                          _c("input", {
-                            staticClass: "form-check-input",
-                            attrs: { type: "checkbox", value: "" }
-                          }),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "form-check-sign" }, [
-                            _c("span", { staticClass: "check" })
-                          ])
-                        ])
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c("p", { staticClass: "title" }, [
-                        _vm._v("Solve the issues")
-                      ]),
-                      _vm._v(" "),
-                      _c("p", { staticClass: "text-muted" }, [
-                        _vm._v(
-                          "Fifty percent of all respondents said they would be more likely to shop at a company "
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "td-actions text-right" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-link",
-                          attrs: {
-                            type: "button",
-                            rel: "tooltip",
-                            title: "",
-                            "data-original-title": "Edit Task"
-                          }
-                        },
-                        [_c("i", { staticClass: "tim-icons icon-pencil" })]
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [
-                      _c("div", { staticClass: "form-check" }, [
-                        _c("label", { staticClass: "form-check-label" }, [
-                          _c("input", {
-                            staticClass: "form-check-input",
-                            attrs: { type: "checkbox", value: "" }
-                          }),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "form-check-sign" }, [
-                            _c("span", { staticClass: "check" })
-                          ])
-                        ])
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c("p", { staticClass: "title" }, [
-                        _vm._v("Release v2.0.0")
-                      ]),
-                      _vm._v(" "),
-                      _c("p", { staticClass: "text-muted" }, [
-                        _vm._v("Ra Ave SW, Seattle, WA 98116, SUA 11:19 AM")
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "td-actions text-right" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-link",
-                          attrs: {
-                            type: "button",
-                            rel: "tooltip",
-                            title: "",
-                            "data-original-title": "Edit Task"
-                          }
-                        },
-                        [_c("i", { staticClass: "tim-icons icon-pencil" })]
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [
-                      _c("div", { staticClass: "form-check" }, [
-                        _c("label", { staticClass: "form-check-label" }, [
-                          _c("input", {
-                            staticClass: "form-check-input",
-                            attrs: { type: "checkbox", value: "" }
-                          }),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "form-check-sign" }, [
-                            _c("span", { staticClass: "check" })
-                          ])
-                        ])
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c("p", { staticClass: "title" }, [
-                        _vm._v("Export the processed files")
-                      ]),
-                      _vm._v(" "),
-                      _c("p", { staticClass: "text-muted" }, [
-                        _vm._v(
-                          "The report also shows that consumers will not easily forgive a company once a breach exposing their personal data occurs. "
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "td-actions text-right" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-link",
-                          attrs: {
-                            type: "button",
-                            rel: "tooltip",
-                            title: "",
-                            "data-original-title": "Edit Task"
-                          }
-                        },
-                        [_c("i", { staticClass: "tim-icons icon-pencil" })]
-                      )
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("tr", [
-                    _c("td", [
-                      _c("div", { staticClass: "form-check" }, [
-                        _c("label", { staticClass: "form-check-label" }, [
-                          _c("input", {
-                            staticClass: "form-check-input",
-                            attrs: { type: "checkbox", value: "" }
-                          }),
-                          _vm._v(" "),
-                          _c("span", { staticClass: "form-check-sign" }, [
-                            _c("span", { staticClass: "check" })
-                          ])
-                        ])
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("td", [
-                      _c("p", { staticClass: "title" }, [
-                        _vm._v("Arival at export process")
-                      ]),
-                      _vm._v(" "),
-                      _c("p", { staticClass: "text-muted" }, [
-                        _vm._v("Capitol Hill, Seattle, WA 12:34 AM")
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { staticClass: "td-actions text-right" }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-link",
-                          attrs: {
-                            type: "button",
-                            rel: "tooltip",
-                            title: "",
-                            "data-original-title": "Edit Task"
-                          }
-                        },
-                        [_c("i", { staticClass: "tim-icons icon-pencil" })]
-                      )
-                    ])
-                  ])
-                ])
-              ])
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-lg-6 col-md-12" }, [
-        _c("div", { staticClass: "card " }, [
-          _c("div", { staticClass: "card-header" }, [
-            _c("h4", { staticClass: "card-title" }, [_vm._v(" Simple Table")])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-body" }, [
-            _c("div", { staticClass: "table-responsive" }, [
-              _c(
-                "table",
-                { staticClass: "table tablesorter ", attrs: { id: "" } },
-                [
-                  _c("thead", { staticClass: " text-primary" }, [
-                    _c("tr", [
-                      _c("th", [
-                        _vm._v(
-                          "\n                          Name\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("th", [
-                        _vm._v(
-                          "\n                          Country\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("th", [
-                        _vm._v(
-                          "\n                          City\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("th", { staticClass: "text-center" }, [
-                        _vm._v(
-                          "\n                          Salary\n                        "
-                        )
-                      ])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("tbody", [
-                    _c("tr", [
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Dakota Rice\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Niger\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Oud-Turnhout\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", { staticClass: "text-center" }, [
-                        _vm._v(
-                          "\n                          $36,738\n                        "
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("tr", [
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Minerva Hooper\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Curaçao\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Sinaai-Waas\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", { staticClass: "text-center" }, [
-                        _vm._v(
-                          "\n                          $23,789\n                        "
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("tr", [
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Sage Rodriguez\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Netherlands\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Baileux\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", { staticClass: "text-center" }, [
-                        _vm._v(
-                          "\n                          $56,142\n                        "
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("tr", [
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Philip Chaney\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Korea, South\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Overland Park\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", { staticClass: "text-center" }, [
-                        _vm._v(
-                          "\n                          $38,735\n                        "
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("tr", [
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Doris Greene\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Malawi\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Feldkirchen in Kärnten\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", { staticClass: "text-center" }, [
-                        _vm._v(
-                          "\n                          $63,542\n                        "
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("tr", [
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Mason Porter\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Chile\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Gloucester\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", { staticClass: "text-center" }, [
-                        _vm._v(
-                          "\n                          $78,615\n                        "
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("tr", [
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Jon Porter\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Portugal\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _vm._v(
-                          "\n                          Gloucester\n                        "
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("td", { staticClass: "text-center" }, [
-                        _vm._v(
-                          "\n                          $98,615\n                        "
-                        )
-                      ])
-                    ])
-                  ])
-                ]
-              )
-            ])
-          ])
-        ])
-      ])
+    return _c("div", { staticClass: "card-header" }, [
+      _c("h4", { staticClass: "card-title" }, [_vm._v(" User's Logs")])
     ])
   }
 ]

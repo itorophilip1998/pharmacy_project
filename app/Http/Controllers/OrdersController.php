@@ -15,8 +15,8 @@ class OrdersController extends Controller
     public function index()
     {
         $orders=Orders::latest()->get();
-        $newOrders=Orders::where('status','new')->latest()->get();
-        $confirmedOrders=Orders::where('status','confirm')->latest()->get();
+        $newOrders=Orders::where('status','Not-paid')->latest()->get();
+        $confirmedOrders=Orders::where('status','Paid')->latest()->get();
         $data=[
             'orders'=>$orders,
             'newOrders'=>$newOrders,
@@ -37,7 +37,7 @@ class OrdersController extends Controller
             'user_id' => 'required',
             'drugs_id' => 'required',
             'status' => 'required',
-            'quantity' => 'required',
+            'qantity' => 'required',
             'price' => 'required',
         ]);
         $orders=Orders::create($request->all());
@@ -71,7 +71,7 @@ class OrdersController extends Controller
             'user_id' => 'required',
             'drugs_id' => 'required',
             'status' => 'required',
-            'quantity' => 'required',
+            'qantity' => 'required',
             'price' => 'required',
         ]);
         $ordersS=Orders::find($orders)->update($request->all());
