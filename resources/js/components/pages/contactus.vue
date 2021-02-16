@@ -33,7 +33,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr class="hover"  v-for="(item, index) in data" :key="index">
+                          <tr class="hover"  v-for="(item, index) in loadData" :key="index">
                           
                             <td>
                                 {{ item.name}}
@@ -120,15 +120,33 @@
 </template>
 <script>
 export default {
+  props:['search'],
     data()
     {
         return{
-           data:{}
+           items:[]
             
         }
     },
     mounted() {
         this.dataLoad()
+    },
+     computed: {
+     loadData()
+    {
+        
+        return this.items.filter(item => {  
+          return  item.name.toLowerCase().match(this.search)
+            ||
+           item.phone.toLowerCase().match(this.search)
+            ||
+           item.email.toLowerCase().match(this.search)
+            ||
+           item.subject.toLowerCase().match(this.search) 
+            ||
+           item.message.toLowerCase().match(this.search);  
+      })
+    }
     },
     methods: {
          remove(id)
@@ -139,7 +157,7 @@ export default {
         dataLoad(){
             axios.get('/contact')  
             .then((response)=>{
-                this.data = response.data.contactus
+                this.items = response.data.contactus
             })
         },
  

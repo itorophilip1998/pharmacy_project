@@ -75,7 +75,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr class="hover"  v-for="(doctor, index) in doctorsInfo" :key="index">
+                          <tr class="hover"  v-for="(doctor, index) in loadData" :key="index">
                             <td>
                                {{ doctor.name}}
                             </td>
@@ -156,6 +156,7 @@
 </template>
 <script>
 export default {
+  props:['search'],
     data()
     {
         return{
@@ -174,6 +175,19 @@ export default {
     mounted() {
         this.doctorsLoad()
     },
+      computed: {
+     loadData()
+    {
+        
+        return this.items.filter(item => {  
+          return  item.name.toLowerCase().match(this.search)
+            ||
+           item.phone.toLowerCase().match(this.search)
+            ||
+           item.email.toLowerCase().match(this.search);  
+      })
+    }
+    },
     methods: {
          remove(id)
         {
@@ -185,7 +199,7 @@ export default {
         doctorsLoad(){
             axios.get('/doctors')
             .then((response)=>{
-                this.doctorsInfo = response.data.doctors
+                this.items = response.data.doctors
             })
         },
         save(){

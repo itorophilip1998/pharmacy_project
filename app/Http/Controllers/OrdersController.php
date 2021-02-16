@@ -16,7 +16,7 @@ class OrdersController extends Controller
     {
         $orders=Orders::latest()->get();
         $newOrders=Orders::where('status','Not-paid')->latest()->get();
-        $confirmedOrders=Orders::where('status','Paid')->latest()->get();
+        $confirmedOrders=Orders::where('status','Paid')->with('user','drugs')->latest()->get();
         $data=[
             'orders'=>$orders,
             'newOrders'=>$newOrders,

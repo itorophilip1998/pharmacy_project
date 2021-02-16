@@ -36,7 +36,7 @@
 
         <div class="main-panel">
             <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg navbar-absolute navbar-transparent">
+            <nav class="navbar navbar-expand navbar-absolute navbar-transparent">
                 <div class="container-fluid">
                   <div class="navbar-wrapper">
                     <div class="navbar-toggle d-inline">
@@ -58,12 +58,12 @@
                   <div class="collapse navbar-collapse" id="navigation">
                     <ul class="navbar-nav ml-auto">
                       <li class="search-bar input-group">
-                        <button class="btn btn-link" id="search-button" data-toggle="modal" data-target="#searchModal"><i class="tim-icons icon-zoom-split" ></i>
+                        <button class="btn btn-link" id="search-button" data-toggle="modal"  data-target="#searchModal"><i class="tim-icons icon-zoom-split" ></i>
                           <span class="d-lg-none d-md-block">Search</span>
                         </button>
                       </li>
 
-                      <li class="dropdown nav-item">
+                      <li class="dropdown nav-item d-none d-md-inline">
                         <a href="#" class="dropdown-toggl
                         e nav-link" data-toggle="dropdown">
                           <div class="photo">
@@ -81,9 +81,9 @@
                 <div class="modal-dialog" role="document">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="SEARCH">
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <i class="tim-icons icon-simple-remove"></i>
+                      <input type="text" class="form-control" id="inlineFormInputGroup" @input="check()"  v-model="search" placeholder="SEARCH">
+                      <button type="button" @click="search=''" class="close" data-dismiss="modal" aria-label="Close">
+                        <i  class="tim-icons icon-simple-remove"></i>
                       </button>
                     </div>
                   </div>
@@ -98,31 +98,14 @@
 
             <!-- End Navbar -->
            <div class="content">
-               <router-view></router-view>
+               <router-view :search="check()"></router-view>
            </div>
 
               <footer class="footer">
-                <div class="container-fluid">
-                  <ul class="nav">
-                    <li class="nav-item">
-                      <a href="javascript:void(0)" class="nav-link">
-                        Creative Tim
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="javascript:void(0)" class="nav-link">
-                        About Us
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a href="javascript:void(0)" class="nav-link">
-                        Blog
-                      </a>
-                    </li>
-                  </ul>
-                  <div class="copyright">
-                    ©  2018 made with <i class="tim-icons icon-heart-2"></i> by
-                    <a href="javascript:void(0)" target="_blank">Creative Tim</a> for a better web.
+                <div class="container-fluid"> 
+                  <div class="copyright text-center">
+                    ©  2018 made with <i class="tim-icons icon-heart-2"></i> laravel by 
+                    <a href="javascript:void(0)" target="_blank">Sylvester Imoh</a> for ND Project.
                   </div>
                 </div>
               </footer>
@@ -141,6 +124,7 @@
     export default {
         data() {
             return {
+                search:'', 
                 imgStorage:'../../../public/',
                 links: [
                     {
@@ -178,7 +162,7 @@
                         name:'Contactus',
                         icon:'tim-icons fa fa-phone',
                         url:'/contactus',
-                    }
+                    } 
                 ],
 
 
@@ -187,9 +171,12 @@
             }
         },
         mounted() {
-            console.log('Component mounted.')
         },
         methods: {
+          check()
+          { 
+            return this.search; 
+          },
           logout()
           {
             axios.post('/logout')

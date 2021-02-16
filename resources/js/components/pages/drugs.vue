@@ -91,7 +91,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr class="hover"  v-for="(drug, index) in drugsInfo" :key="index">
+                          <tr class="hover"  v-for="(drug, index) in loadData" :key="index">
                             <td>
                                {{ drug.name}}
                             </td>
@@ -189,6 +189,7 @@
 </template>
 <script>
 export default {
+  props:['search'],
     data()
     {
         return{
@@ -208,7 +209,23 @@ export default {
     mounted() {
         this.drugsLoad()
     },
+           computed: {
+     loadData()
+    {
+        
+        return this.items.filter(item => {  
+          return  item.name.toLowerCase().match(this.search)
+            ||
+           item.price.toLowerCase().match(this.search)
+            ||
+           item.type.toLowerCase().match(this.search)
+            ||
+           item.prescription.toLowerCase().match(this.search);  
+      })
+    }
+    },
     methods: {
+ 
        removeDrugs(id)
         {
              axios.delete('/drugs/'+id) 
@@ -217,7 +234,7 @@ export default {
         drugsLoad(){
             axios.get('/drugs')
             .then((response)=>{
-                this.drugsInfo = response.data.drugs
+                this.items = response.data.drugs
             })
         },
       

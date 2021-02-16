@@ -35,7 +35,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr class="hover"  v-for="(item, index) in data" :key="index">
+                          <tr class="hover"  v-for="(item, index) in loadData" :key="index">
                           
                             <td>
                                 {{ item.name}}
@@ -127,15 +127,35 @@
 </template>
 <script>
 export default {
+  props:['search'],
     data()
     {
         return{
-           data:{}
+           items:[]
             
         }
     },
     mounted() {
         this.dataLoad()
+    },
+   computed: {
+     loadData()
+    {
+        
+        return this.items.filter(item => {  
+          return  item.name.toLowerCase().match(this.search)
+            ||
+           item.doctor_name.toLowerCase().match(this.search)
+            ||
+           item.email.toLowerCase().match(this.search)
+            ||
+           item.date.toLowerCase().match(this.search)
+            ||
+           item.time.toLowerCase().match(this.search)
+            ||
+           item.message.toLowerCase().match(this.search);  
+      })
+    }
     },
     methods: {
          remove(id)
@@ -146,7 +166,7 @@ export default {
         dataLoad(){
             axios.get('/events')  
             .then((response)=>{
-                this.data = response.data.appointments
+                this.items = response.data.appointments
             })
         },
  

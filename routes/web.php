@@ -9,6 +9,7 @@ use App\Drugs;
 use App\Notifications;
 use App\Orders;
 use App\Logs;
+use Illuminate\Support\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,7 +35,10 @@ Route::get('/loads', function () {
     'doctors'=>Doctors::all()->count(),
     'drugs'=>Drugs::all()->count(),
     'notifications'=>Notifications::all()->count(),
-    'Orders'=>Orders::all()->count(),
+    'Orders'=>Orders::where('status','Paid')->count(),
+    'total'=>Orders::where('status','Paid')->pluck('price')->sum(), 
+    'todaytotal'=>Orders::where('status','Paid')->where('created_at','>=',Carbon::today())->pluck('price')->sum(),   
+    'weeklytotal'=>Orders::where('status','Paid')->where('created_at','>=',today()->subDays(7))->pluck('price')->sum(),   
     'user'=>User::all()->count(),
     "events"=>Logs::where('user_id',Auth::user()->id)->with('user')->latest()->paginate(10)
 

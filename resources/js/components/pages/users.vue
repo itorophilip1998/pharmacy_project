@@ -9,7 +9,7 @@
               <div class="col-md-12">
                 <div class="card ">
                   <div class="card-header">
-                    <h4 class="card-title"> Users Information</h4>
+                    <h4 class="card-title"> Users Information </h4>
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">
@@ -32,7 +32,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr class="hover"  v-for="(item, index) in data" :key="index">
+                          <tr class="hover"  v-for="(item, index) in loadData" :key="index">
                           
                             <td>
                                 {{ item.name}}
@@ -64,15 +64,30 @@
 </template>
 <script>
 export default {
+  props:['search'],
     data()
     {
         return{
-           data:{}
-            
+           items:[], 
         }
     },
     mounted() {
         this.dataLoad()
+    },
+    computed: {
+     loadData()
+    {
+        
+        return this.items.filter(item => { 
+          return  item.name.toLowerCase().match(this.search)
+            ||
+           item.email.toLowerCase().match(this.search)
+            ||
+           item.role.toLowerCase().match(this.search)
+            ||
+           item.created_at.toLowerCase().match(this.search);  
+      })
+    }
     },
     methods: {
          remove(id)
@@ -83,7 +98,7 @@ export default {
         dataLoad(){
             axios.get('/user')
             .then((response)=>{
-                this.data = response.data.user
+                this.items = response.data.user
             })
         },
  

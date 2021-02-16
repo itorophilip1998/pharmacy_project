@@ -10,6 +10,7 @@ import Subscribes from './components/pages/subscribes';
 import Users from './components/pages/users';
 import Apointment from './components/pages/appointment';
 import Contact from './components/pages/contactus';
+import Order from './components/pages/buys';
 
 
 const routes = [
@@ -21,6 +22,7 @@ const routes = [
     { path: '/users', component: Users },
     { path: '/apointment', component: Apointment },
     { path: '/contactus', component: Contact },
+    { path: '/order', component: Order },
   ]
 
   const router = new VueRouter({

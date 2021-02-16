@@ -9,7 +9,7 @@
               <div class="col-md-12">
                 <div class="card ">
                   <div class="card-header">
-                    <h4 class="card-title"> Subscribers Information</h4>
+                    <h4 class="card-title">Orders from Customers</h4>
                   </div>
                   <div class="card-body">
                     <div class="table-responsive">
@@ -17,10 +17,18 @@
                         <thead class=" text-primary">
                           <tr > 
                             <th>
-                                Email
+                                Name 
                             </th>  
-                            </th>
-                          
+                            <th>
+                                Drugs
+                            </th>  
+                            <th>
+                                Amount
+                            </th>  
+                            <th>
+                                Date/Time
+                            </th>   
+                            </th> 
                             <th class="text-center">
                                 Actions
                             </th>
@@ -30,7 +38,16 @@
                           <tr class="hover"  v-for="(item, index) in loadData" :key="index">
                           
                             <td>
-                                {{ item.email}}
+                                {{ item.user.name}}
+                            </td> 
+                            <td>
+                                {{ item.drugs.name}}
+                            </td> 
+                            <td>
+                                {{ item.price}}
+                            </td> 
+                            <td>
+                                {{ item.created_at}} 
                             </td> 
                           
                             <td class="text-center"> 
@@ -53,7 +70,7 @@
 </template>
 <script>
 export default {
-  props:['search'],
+    props:['search'],
     data()
     {
         return{
@@ -62,27 +79,35 @@ export default {
         }
     },
     mounted() {
-        this.subscribersLoad()
+        this.dataLoad()
     },
-   computed: {
-     loadData()
+     computed: {
+    loadData()
     {
         
-        return this.items.filter(item => {  
-          return  item.email.toLowerCase().match(this.search);  
+        return this.items.filter(item => {
+          return  item.user.name.toLowerCase().match(this.search)
+            ||
+           item.drugs.name.toLowerCase().match(this.search)
+            ||
+           item.price.toLowerCase().match(this.search)
+            ||
+           item.status.toLowerCase().match(this.search)
+            ||
+           item.qantity.toLowerCase().match(this.search) ;  
       })
     }
-    },
+   },
     methods: {
          remove(id)
         {
-             axios.delete('/notify/'+id) 
-              this.subscribersLoad() 
+             axios.delete('/order/'+id) 
+              this.dataLoad() 
         },
-        subscribersLoad(){
-            axios.get('/notify')
+        dataLoad(){
+            axios.get('/order')
             .then((response)=>{
-                this.items = response.data.notification
+                this.items = response.data.confirmedOrders
             })
         },
  

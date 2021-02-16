@@ -95,8 +95,8 @@
           <div class="col-lg-4">
             <div class="card card-chart">
               <div class="card-header">
-                <h5 class="card-category">Sales Rate</h5>
-                <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> 763,215</h3>
+                <h5 class="card-category">Daily Sales</h5>
+                <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> <strike>N</strike>{{dashboard.todaytotal}}</h3>
               </div>
               <div class="card-body">
                 <div class="chart-area">
@@ -108,8 +108,8 @@
           <div class="col-lg-4">
             <div class="card card-chart">
               <div class="card-header">
-                <h5 class="card-category">Daily Sales</h5>
-                <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info"></i> <strike>N</strike>100,500.000</h3>
+                <h5 class="card-category">Weekly Sales</h5>
+                <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info"></i> <strike>N</strike>{{dashboard.weeklytotal}}</h3>
               </div>
               <div class="card-body">
                 <div class="chart-area">
@@ -121,8 +121,8 @@
           <div class="col-lg-4">
             <div class="card card-chart">
               <div class="card-header">
-                <h5 class="card-category">Profit Gross</h5>
-                <h3 class="card-title"><i class="tim-icons icon-send text-success"></i><strike>N</strike>12,100</h3>
+                <h5 class="card-category">Total Sales</h5>
+                <h3 class="card-title"><i class="tim-icons icon-send text-success"></i><strike>N</strike>{{dashboard.total}}</h3>
               </div>
               <div class="card-body">
                 <div class="chart-area">
@@ -313,6 +313,7 @@
 </template>
 <script>
 export default {
+    props:['search'],
     data() {
         return {
 
@@ -320,7 +321,7 @@ export default {
         }
     },
     mounted(){
-      this.load();
+      this.load(); 
     },
     methods: {
         load(){
@@ -337,7 +338,7 @@ export default {
         },
         cardNav($url)
         {
-            this.$route.push('/'+$url);
+            this.$router.push('/'+$url);
         }
     },
 
