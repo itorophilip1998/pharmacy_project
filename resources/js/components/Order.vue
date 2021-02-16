@@ -99,8 +99,14 @@
                   "price":this.order.qantity * price,
               }
            )
-            .then((response)=>{ 
-               location.href="https://paystack.com/pay/jesusdekeyoffline" 
+            .then((response)=>{  
+                if(window.location.host == "jesusdekey.herokuapp.com")
+                {
+                  location.href="https://paystack.com/pay/jesusdekey"  
+                }
+                else{
+                   location.href="https://paystack.com/pay/jesusdekeyoffline"  
+                }
             })
         }   
     }

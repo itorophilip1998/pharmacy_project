@@ -2198,7 +2198,11 @@ __webpack_require__.r(__webpack_exports__);
         "status": this.order.status,
         "price": this.order.qantity * price
       }).then(function (response) {
-        location.href = "https://paystack.com/pay/jesusdekeyoffline";
+        if (window.location.host == "jesusdekey.herokuapp.com") {
+          location.href = "https://paystack.com/pay/jesusdekey";
+        } else {
+          location.href = "https://paystack.com/pay/jesusdekeyoffline";
+        }
       });
     }
   }
