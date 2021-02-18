@@ -72,6 +72,9 @@ Route::get('/book-drugs', function () {
 });
 
 Route::get('/paid', function () {
+    if (!Auth::check()) {
+        return redirect('/login');
+    }
     Orders::where("user_id",Auth::user()->id)->update(["status"=>"Paid"]);
     return redirect('/home');
 });

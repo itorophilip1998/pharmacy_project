@@ -31,7 +31,7 @@ class NotificationsController extends Controller
         ]);
         $notifications=Notifications::create($request->all());
         if ($notifications) {
-            $request->session()->flash('message',"We have recieved your request, we will look up to it"); 
+            $request->session()->flash('messages',"We have recieved your request, we will look up to it"); 
         }
          return redirect('/#mc-form');
     }

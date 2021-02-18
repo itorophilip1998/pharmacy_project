@@ -36,7 +36,7 @@ class ContactController extends Controller
         ]);
         $contactus=Contact::create($request->all());
         if ($contactus) {
-            $request->session()->flash('message',"We have recieved your request, we will look up to it"); 
+            $request->session()->flash('messagess',"We have recieved your request, we will look up to it"); 
         }
         return redirect('/#getintouch');
     }

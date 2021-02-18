@@ -4,9 +4,11 @@
 
 use App\Notifications;
 use Faker\Generator as Faker;
+use Illuminate\Support\Str;
 
 $factory->define(Notifications::class, function (Faker $faker) {
-    return [
-        //
+    return [ 
+        'email' => $faker->unique()->safeEmail 
     ];
 });
+

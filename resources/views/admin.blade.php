@@ -24,7 +24,7 @@
 
 <body>
     <div id="app">
-        <admin-template></admin-template>
+        <admin-template :user="{{ json_encode(Auth::user()) }}"></admin-template>
 
     </div>
 

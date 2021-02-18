@@ -156,7 +156,7 @@
 </template>
 <script>
 export default {
-  props:['search'],
+  props:['search','user'],
     data()
     {
         return{
@@ -165,7 +165,7 @@ export default {
                 email:"",
                 phone:"",
                 pictures:"", 
-                user_id:1, 
+                user_id:this.user.id, 
                 _method:""
             }, 
             db:false,
@@ -213,7 +213,7 @@ export default {
                 email:"",
                 phone:"",
                 pictures:"", 
-                user_id:1, 
+                user_id:this.user.id, 
                 _method:""
             }
 

@@ -189,7 +189,7 @@
 </template>
 <script>
 export default {
-  props:['search'],
+  props:['search','user'],
     data()
     {
         return{
@@ -199,7 +199,7 @@ export default {
                 type:"",
                 quantity:"1",
                 prescription:"",
-                user_id:1, 
+                user_id:'', 
                 _method:""
             }, 
             db:false,
@@ -207,7 +207,7 @@ export default {
         }
     },
     mounted() {
-        this.drugsLoad()
+        this.drugsLoad() 
     },
            computed: {
      loadData()
@@ -240,6 +240,7 @@ export default {
       
         save(){
             this.alert="" 
+            this.drugs.user_id=this.user.id
             axios.post('/drugs',this.drugs )
             .then((response)=>{
                 this.drugsLoad()
@@ -250,7 +251,7 @@ export default {
                 type:"",
                 quantity:"",
                 prescription:"",
-                user_id:1,
+                user_id:'',
                  id:'',
             }
 
@@ -260,6 +261,7 @@ export default {
             })
         },
         update(drug){ 
+            this.drugs.id=this.user.id 
             this.drugs=drug
             this.drugs._method="PUT"
             axios.post('/drugs/'+this.drugs.id,

@@ -9,8 +9,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 	<!-- VENDOR CSS -->
- <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
-  {{-- <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet"> --}}
+ <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" /> 
 
 	<link rel="stylesheet" href="{{ asset('assets/css/black-dashboard.css?v=1.0.0')}}">
 	<link rel="stylesheet" href="{{ asset('assets/css/black-dashboard')}}">
@@ -19,6 +18,11 @@
     <link rel="shortcut icon" sizes="76x76" href="{{ asset('app/images/logo.png')}}" type="image/x-icon" />
 
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <style  >
+          body{
+            overflow-y:none !important;
+          }
+    </style>
 </head>
 
 <body>

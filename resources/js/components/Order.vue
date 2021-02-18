@@ -114,6 +114,13 @@
  
  </script>
 <style lang="scss" scoped>
+.content
+{
+    height:100vh;
+     overflow-y:scroll;
+     paddind-bottom:20px;
+
+}
    #app{
        background:white;
        width:100% !important; 

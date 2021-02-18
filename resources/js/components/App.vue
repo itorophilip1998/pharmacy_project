@@ -98,7 +98,7 @@
 
             <!-- End Navbar -->
            <div class="content">
-               <router-view :search="check()"></router-view>
+               <router-view :search="check()" :user='user'></router-view>
            </div>
 
               <footer class="footer">
@@ -122,8 +122,10 @@
 
 <script>
     export default {
+      props:['user'],
         data() {
             return {
+                 user:this.user,
                 search:'', 
                 imgStorage:'../../../public/',
                 links: [
@@ -171,6 +173,7 @@
             }
         },
         mounted() {
+          
         },
         methods: {
           check()

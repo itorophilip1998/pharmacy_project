@@ -131,7 +131,7 @@
                           <div class="service-time one" style="background:#2895f1;">
                              <span class="info-icon"><i class="fa fa-ambulance" aria-hidden="true"></i></span>
                              <h3>Emergency Case</h3>
-                             <p>Dignissimos ducimus qui blanditii sentium volta tum deleniti atque cori as quos dolores et quas mole.</p>
+                             <p>We attain to any Emergency Case, we are always ready at any point in time to safe lives.</p>
                           </div>
                        </div>
                     </div>
@@ -155,7 +155,7 @@
                           <div class="service-time three" style="background:#0060b1;">
                              <span class="info-icon"><i class="fa fa-hospital-o" aria-hidden="true"></i></span>
                              <h3>Clinic Timetable</h3>
-                             <p>Dignissimos ducimus qui blanditii sentium volta tum deleniti atque cori as quos dolores et quas mole.</p>
+                             <p>We keep to time an also encourage all workers in our pharmacy to keep to time, Our time table is our daily clock.</p>
                           </div>
                        </div>
                     </div>
@@ -173,8 +173,8 @@
                           <div class="message-box">
                              <h4>What We Do</h4>
                              <h2>Clinic Service</h2>
-                             <p class="lead">Quisque eget nisl id nulla sagittis auctor quis id. Aliquam quis vehicula enim, non aliquam risus. Sed a tellus quis mi rhoncus dignissim.</p>
-                             <p> Integer rutrum ligula eu dignissim laoreet. Pellentesque venenatis nibh sed tellus faucibus bibendum. Sed fermentum est vitae rhoncus molestie. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.  </p>
+                             <p class="lead">Jesus De Key Pharmacy: we render Health care services to our customers dispite age,category, level we treat all humans as one.</p>
+                             <p> We are affordable, we are dependable, we are the hope to the future of akwa ibom state when it comes to health and hygien, we care for babies,mothers,pregnant women, we have all the equipment needed to carry out any operation.  </p>
                              <a href="#services" data-scroll class="btn btn-light btn-radius btn-brd grd1 effect-1">Learn More</a>
                           </div>
                           <!-- end messagebox -->
@@ -246,42 +246,42 @@
                                 <div class="serv">
                                    <span class="icon-service"><img src="{{ asset('app/images/service-icon1.png')}}" alt="#" /></span>
                                    <h4>PREMIUM FACILITIES</h4>
-                                   <p>Lorem Ipsum is simply dummy text of the printing.</p>
+                                   <p>More Advance facilities and quality equipment.</p>
                                 </div>
                              </div>
                              <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                                 <div class="serv">
                                    <span class="icon-service"><img src="{{ asset('app/images/service-icon2.png')}}" alt="#" /></span>
                                    <h4>LARGE LABORATORY</h4>
-                                   <p>Lorem Ipsum is simply dummy text of the printing.</p>
+                                   <p>Theatre centre, laboratories are big and large .</p>
                                 </div>
                              </div>
                              <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                                 <div class="serv">
                                    <span class="icon-service"><img src="{{ asset('app/images/service-icon3.png')}}" alt="#" /></span>
                                    <h4>DETAILED SPECIALIST</h4>
-                                   <p>Lorem Ipsum is simply dummy text of the printing.</p>
+                                   <p>All doctors and Specialist are listed in the list of doctors.</p>
                                 </div>
                              </div>
                              <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                                 <div class="serv">
                                    <span class="icon-service"><img src="{{ asset('app/images/service-icon4.png')}}" alt="#" /></span>
                                    <h4>CHILDREN CARE CENTER</h4>
-                                   <p>Lorem Ipsum is simply dummy text of the printing.</p>
+                                   <p>We care for mothers and babies, and day care.</p>
                                 </div>
                              </div>
                              <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                                 <div class="serv">
                                    <span class="icon-service"><img src="{{ asset('app/images/service-icon5.png')}}" alt="#" /></span>
                                    <h4>FINE INFRASTRUCTURE</h4>
-                                   <p>Lorem Ipsum is simply dummy text of the printing.</p>
+                                   <p>We have quality and nice building suitable for any health.</p>
                                 </div>
                              </div>
                              <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
                                 <div class="serv">
                                    <span class="icon-service"><img src="{{ asset('app/images/service-icon6.png')}}" alt="#" /></span>
                                    <h4>ANYTIME BLOOD BANK</h4>
-                                   <p>Lorem Ipsum is simply dummy text of the printing.</p>
+                                   <p>We make blood donours available for blood transmission.</p>
                                 </div>
                              </div>
                           </div>
@@ -452,7 +452,7 @@
                                 <p class="lead">They have got my project on time with the competition with a sed highly skilled, and experienced & professional team.</p>
                              </div>
                              <div class="testi-meta">
-                                <img src="images/testi_01.png" alt="" class="img-responsive alignleft">
+                                <img src="{{ asset('app/images/testi_01.png')}}" alt="" class="img-responsive alignleft">
                                 <h4>James Fernando <small>- Manager of Racer</small></h4>
                              </div>
                              <!-- end testi-meta -->
@@ -501,7 +501,7 @@
                                 <p class="lead">They have got my project on time with the competition with a sed highly skilled, and experienced & professional team.</p>
                              </div>
                              <div class="testi-meta">
-                                <img src="images/testi_01.png" alt="" class="img-responsive alignleft">
+                                <img src="{{ asset('app/images/testi_01.png')}}" alt="" class="img-responsive alignleft">
                                 <h4>Martin Johnson <small>- Founder of Goosilo</small></h4>
                              </div>
                              <!-- end testi-meta -->
@@ -559,9 +559,9 @@
                              </div>
                              
                              <div class="col-md-12 mt-2">
-                                       @if (Session::has('message'))
+                                       @if (Session::has('messagess'))
                                                 <div class="alert alert-success m-0 p-0  col-12" role="alert">
-                                                    {{ Session::get('message') }}
+                                                    {{ Session::get('messagess') }}
                                                 </div>
                                     @endif
                                       <br/>      
@@ -578,14 +578,14 @@
                        <div class="col-md-4">
                           <div class="logo padding">
                              <a href=""><img style="width:50px;height:40px;display: inline;" src="{{ asset('app/images/logo.png')}}" alt=""> <b style="font-size: 30px;">Jesus De Key</b></a>
-                             <p>Locavore pork belly scen ester pine est chill wave microdosing pop uple itarian cliche artisan.</p>
+                             <p>Jesus De key Pharmacy now available 24/7 hours for you and for your health.</p>
                           </div>
                        </div>
                        <div class="col-md-4">
                           <div class="footer-info padding">
                              <h3>CONTACT US</h3>
-                             <p><i class="fa fa-map-marker" aria-hidden="true"></i> PO Box 16122 Collins Street West Victoria 8007 Australia</p>
-                             <p><i class="fa fa-paper-plane" aria-hidden="true"></i> info@gmail.com</p>
+                             <p><i class="fa fa-map-marker" aria-hidden="true"></i> Abak, Abak L.G.A</p>
+                             <p><i class="fa fa-paper-plane" aria-hidden="true"></i> info@jesusdekey.com</p>
                              <p><i class="fa fa-phone" aria-hidden="true"></i> (+1) 800 123 456</p>
                           </div>
                        </div>
@@ -595,9 +595,9 @@
                              <p>Get healthy news, tip and solutions to your problems from our experts.</p>
 
                              <div class="subcriber-box">
-                                @if (Session::has('message'))
+                                @if (Session::has('messages'))
                                                 <div class="alert alert-success m-0 p-0 " role="alert">
-                                                    {{ Session::get('message') }}
+                                                    {{ Session::get('messages') }}
                                                 </div>
                                             @endif
                                 <form id="mc-form" class="mc-form" method="POST" action="/notify">
@@ -629,7 +629,7 @@
                     <div class="row">
                        <div class="col-md-8">
                           <div class="footer-text">
-                             <p>© 2018 Lifecare. All Rights Reserved.</p>
+                             <p>© 2018 jesusdekey. All Rights Reserved.</p>
                           </div>
                        </div>
                        <div class="col-md-4">
